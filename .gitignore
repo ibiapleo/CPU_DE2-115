@@ -1,0 +1,33 @@
+# ---- Quartus (tudo isso e gerado de novo na compilacao) ----
+db/
+incremental_db/
+output_files/
+simulation/
+greybox_tmp/
+.qsys_edit/
+*.qws
+*.bak
+*.rpt
+*.summary
+*.smsg
+*.done
+*.jdi
+*.sld
+*.pin
+*.sof
+*.pof
+*.qarlog
+c5_pin_model_dump.txt
+PLLJ_PLLSPE_INFO.txt
+
+# ---- ModelSim ----
+sim/work/
+transcript
+*.wlf
+*.vcd
+*.vstf
+modelsim.ini
+
+# ---- Outros ----
+*.zip
+*.qar

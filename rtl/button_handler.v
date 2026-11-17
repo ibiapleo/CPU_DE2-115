@@ -10,11 +10,9 @@ module button_handler #(
     localparam SOLTO = 3'd0, FILTRA_APERTO = 3'd1, APERTADO = 3'd2,
                FILTRA_SOLTURA = 3'd3, SOLTOU = 3'd4;
 
-    localparam CNT_W = $clog2(DEBOUNCE_CYCLES + 1);
-
-    reg [2:0]       estado_atual;
-    reg [1:0]       sync;     // sincronizador de 2 flip-flops; sync[1] e o botao ja sincronizado
-    reg [CNT_W-1:0] tempo;
+    reg [2:0]  estado_atual;
+    reg [1:0]  sync;     // sincronizador de 2 flip-flops; sync[1] e o botao ja sincronizado
+    reg [19:0] tempo;    // 20 bits contam ate 1.048.575, o bastante para 1.000.000
 
     wire btn = sync[1];
 

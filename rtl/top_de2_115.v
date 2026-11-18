@@ -15,7 +15,7 @@ module top_de2_115 #(
     output wire        LCD_EN,
     output wire        LCD_ON,
     output wire        LCD_BLON,
-    output wire [8:7]  LEDG,
+    output wire [8:0]  LEDG,
     output wire [17:0] LEDR
 );
     wire clk = CLOCK_50;
@@ -88,8 +88,12 @@ module top_de2_115 #(
     );
 
     // ---------------- LEDs de debug -------------------------------------------
-    assign LEDR    = SW;
-    assign LEDG[8] = system_on;
-    assign LEDG[7] = lcd_busy;
+    assign LEDR      = SW;
+    assign LEDG[8]   = system_on;
+    assign LEDG[7]   = lcd_busy;
+    assign LEDG[6:3] = 4'b0000;
+    assign LEDG[2]   = ~KEY[1];   // aceso enquanto Ligar esta apertado
+    assign LEDG[1]   = 1'b0;
+    assign LEDG[0]   = ~KEY[0];   // aceso enquanto Enviar esta apertado
 endmodule
 `default_nettype wire

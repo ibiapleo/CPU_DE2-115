@@ -81,6 +81,13 @@ set_location_assignment PIN_L6 -to LCD_BLON
 set_location_assignment PIN_Y2 -to CLOCK_50
 set_location_assignment PIN_M23 -to KEY[0]
 set_location_assignment PIN_M21 -to KEY[1]
+set_location_assignment PIN_E21 -to LEDG[0]
+set_location_assignment PIN_E22 -to LEDG[1]
+set_location_assignment PIN_E25 -to LEDG[2]
+set_location_assignment PIN_E24 -to LEDG[3]
+set_location_assignment PIN_H21 -to LEDG[4]
+set_location_assignment PIN_G20 -to LEDG[5]
+set_location_assignment PIN_G22 -to LEDG[6]
 set_location_assignment PIN_G21 -to LEDG[7]
 set_location_assignment PIN_F17 -to LEDG[8]
 set_location_assignment PIN_G19 -to LEDR[0]

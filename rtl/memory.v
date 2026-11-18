@@ -1,5 +1,3 @@
-// PARTE C - Banco de 16 registradores x 16 bits. MODULO OBRIGATORIO.
-// Especificacao: docs/DIVISAO.md, Parte C
 `default_nettype none
 module memory (
     input  wire        clk,
@@ -13,10 +11,30 @@ module memory (
     output wire [15:0] rd_data_a,  // leitura combinacional
     output wire [15:0] rd_data_b   // leitura combinacional
 );
-    reg [15:0] regs [0:15];
 
-    // TODO (Parte C): escrita sincrona, rst/clear zeram tudo
-    assign rd_data_a = regs[rd_addr_a];
-    assign rd_data_b = regs[rd_addr_b];
+    reg [15:0] ram [15:0];
+    integer i;
+
+    task limpar_ram;
+        begin
+            for (i = 0; i < 16; i = i + 1) begin
+                ram[i] = 0;
+            end
+        end
+    endtask
+
+    always @(posedge clk or posedge clear or posedge rst) begin
+        if (rst || clear) begin
+            limpar_ram();
+        end
+        else begin
+            if (we) begin
+                ram[wr_addr] <= wr_data;
+            end
+        end
+    end
+	 
+	 assign rd_data_a = ram[rd_addr_a];
+    assign rd_data_b = ram[rd_addr_b];
+	 
 endmodule
-`default_nettype wire

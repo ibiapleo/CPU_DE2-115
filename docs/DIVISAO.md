@@ -224,7 +224,7 @@ Se Ligar for apertado no meio de uma instrução, guarde o pedido e trate no REA
 - Escrita na borda do clock quando `we = 1`.
 - `clear` ou `rst` zeram todos. `clear` tem prioridade sobre `we`.
 
-**`bin2bcd`** (combinacional): número de 16 bits → 5 dígitos BCD (algoritmo *double dabble*).
+**`bin2bcd`** (combinacional): número de 16 bits → 5 dígitos BCD. Cada divisão por 10, 100, 1000 e 10000 é feita como multiplicação por uma constante seguida de deslocamento (por exemplo, `bin / 10 = (bin * 52429) >> 19`), e cada dígito sai com uma subtração. Divisão comum (`/` e `%`) não cabe em um ciclo de 50 MHz.
 
 **`lcd_formatter`** (combinacional): transforma `kind`, `opcode`, `reg_num` e `value` nos 32 caracteres de `screen`. O caractere `i` fica em `screen[255-8*i -: 8]`, então dá para escrever direto `screen = "ADD       [0001]          +00012";`. Os textos de cada tela estão na tabela da seção 5.
 

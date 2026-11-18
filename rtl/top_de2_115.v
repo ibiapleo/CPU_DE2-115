@@ -14,7 +14,9 @@ module top_de2_115 #(
     output wire        LCD_RW,
     output wire        LCD_EN,
     output wire        LCD_ON,
-    output wire        LCD_BLON
+    output wire        LCD_BLON,
+    output wire [8:7]  LEDG,
+    output wire [17:0] LEDR
 );
     wire clk = CLOCK_50;
 
@@ -84,5 +86,10 @@ module top_de2_115 #(
         .lcd_data(LCD_DATA), .lcd_rs(LCD_RS), .lcd_rw(LCD_RW), .lcd_en(LCD_EN),
         .lcd_on(LCD_ON), .lcd_blon(LCD_BLON)
     );
+
+    // ---------------- LEDs de debug -------------------------------------------
+    assign LEDR    = SW;
+    assign LEDG[8] = system_on;
+    assign LEDG[7] = lcd_busy;
 endmodule
 `default_nettype wire

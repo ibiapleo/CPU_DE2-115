@@ -1,19 +1,29 @@
-// Testbench de bin2bcd - especificacao em docs/DIVISAO.md, testes em docs/DIVISAO.md
 `timescale 1ns/1ps
 `default_nettype none
-`include "defines.vh"
 module tb_bin2bcd;
-    reg clk = 1'b0;
-    always #10 clk = ~clk;   // 50 MHz
     integer erros = 0;
+    integer n;
 
-    // TODO: instanciar o modulo, aplicar estimulos e comparar com o esperado.
-    // Ao achar erro: erros = erros + 1; $display("ERRO: ...");
+    reg  [15:0] bin;
+    wire [19:0] bcd;
+    reg  [19:0] esperado;
 
+    bin2bcd dut (.bin(bin), .bcd(bcd));
+
+    // Testa todos os 65.536 valores possiveis
     initial begin
-        $dumpfile("tb_bin2bcd.vcd");
-        $dumpvars(0, tb_bin2bcd);
-        #1000;
+        for (n = 0; n < 65536; n = n + 1) begin
+            bin = n;
+            esperado = (n / 10000) << 16 | (n / 1000 % 10) << 12 | (n / 100 % 10) << 8 |
+                       (n / 10 % 10) << 4 | (n % 10);
+            #1;
+            if (bcd !== esperado) begin
+                erros = erros + 1;
+                if (erros <= 10)
+                    $display("ERRO: bin=%0d obtido=%h esperado=%h", n, bcd, esperado);
+            end
+        end
+
         if (erros == 0) $display("tb_bin2bcd: OK");
         else            $display("tb_bin2bcd: %0d ERRO(S)", erros);
         $finish;

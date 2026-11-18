@@ -11,21 +11,20 @@ module tb_top;
 
     localparam S_OFF = 4'd0, S_READY = 4'd4;
 
-    reg  [3:0]  key = 4'b1111;      // KEY[1] = Ligar, KEY[0] = Enviar (0 = apertado)
+    reg  [1:0]  key = 2'b11;        // KEY[1] = Ligar, KEY[0] = Enviar (0 = apertado)
     reg  [17:0] sw  = 18'd0;
     wire [7:0]  lcd_data;
     wire        lcd_rs, lcd_rw, lcd_en, lcd_on, lcd_blon;
-    wire [8:0]  ledg;
-    wire [17:0] ledr;
 
     top_de2_115 #(.DEBOUNCE_CYCLES(DB), .LCD_CLK_HZ(LCD_HZ)) dut (
         .CLOCK_50(clk), .KEY(key), .SW(sw),
         .LCD_DATA(lcd_data), .LCD_RS(lcd_rs), .LCD_RW(lcd_rw), .LCD_EN(lcd_en),
-        .LCD_ON(lcd_on), .LCD_BLON(lcd_blon),
-        .LEDG(ledg), .LEDR(ledr)
+        .LCD_ON(lcd_on), .LCD_BLON(lcd_blon)
     );
 
-    wire [3:0] estado = ledg[3:0];
+    wire [3:0] estado    = dut.dbg_state;
+    wire       overflow  = dut.alu_overflow;
+    wire       system_on = dut.system_on;
 
     // LCD falso: na descida de EN guarda o byte, como o HD44780
     reg [7:0] ddram [0:31];
@@ -142,18 +141,18 @@ module tb_top;
         enviar(18'b000_0111_0000_0_111111, "8  LOAD R7, 63",       "LOAD      [0111]", "          +00063");
         enviar(18'b101_0111_0111_0_111111, "9  MUL R7, R7, 63",    "MUL       [0111]", "          +03969");
         enviar(18'b101_0111_0111_0_111111, "10 MUL R7, R7, 63",    "MUL       [0111]", "          -12097");
-        if (ledg[6] !== 1'b1) begin
+        if (overflow !== 1'b1) begin
             erros = erros + 1;
-            $display("ERRO  10 LEDG[6] (overflow) apagado");
+            $display("ERRO  10 overflow da ULA em 0");
         end
         enviar(18'b110_0000_0000_0_000000, "11 CLEAR",             "CLEAR           ", "                ");
         enviar(18'b111_0000_0111_0_000000, "12 DISPLAY R7",        "DPL       [0111]", "          +00000");
 
         aperta(1);
         espera_tela(S_OFF);
-        if (display_on || linha(0) !== "                " || linha(1) !== "                " || ledg[8] !== 1'b0) begin
+        if (display_on || linha(0) !== "                " || linha(1) !== "                " || system_on !== 1'b0) begin
             erros = erros + 1;
-            $display("ERRO  13 desligar: display_on=%b system_on=%b |%s|%s|", display_on, ledg[8], linha(0), linha(1));
+            $display("ERRO  13 desligar: display_on=%b system_on=%b |%s|%s|", display_on, system_on, linha(0), linha(1));
         end else
             $display("ok    13 desligar (display apagado)");
 

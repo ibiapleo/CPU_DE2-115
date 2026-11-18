@@ -7,16 +7,14 @@ module top_de2_115 #(
     parameter LCD_CLK_HZ      = 50_000_000    // no tb_top use 50_000
 ) (
     input  wire        CLOCK_50,
-    input  wire [3:0]  KEY,        // ativos em 0
+    input  wire [1:0]  KEY,        // ativos em 0
     input  wire [17:0] SW,
     output wire [7:0]  LCD_DATA,
     output wire        LCD_RS,
     output wire        LCD_RW,
     output wire        LCD_EN,
     output wire        LCD_ON,
-    output wire        LCD_BLON,
-    output wire [8:0]  LEDG,
-    output wire [17:0] LEDR
+    output wire        LCD_BLON
 );
     wire clk = CLOCK_50;
 
@@ -86,13 +84,5 @@ module top_de2_115 #(
         .lcd_data(LCD_DATA), .lcd_rs(LCD_RS), .lcd_rw(LCD_RW), .lcd_en(LCD_EN),
         .lcd_on(LCD_ON), .lcd_blon(LCD_BLON)
     );
-
-    // ---------------- LEDs de debug -------------------------------------------
-    assign LEDR      = SW;
-    assign LEDG[8]   = system_on;
-    assign LEDG[7]   = lcd_busy;
-    assign LEDG[6]   = alu_overflow;
-    assign LEDG[5:4] = 2'b00;
-    assign LEDG[3:0] = dbg_state;
 endmodule
 `default_nettype wire
